@@ -1,0 +1,36 @@
+from urllib.parse import quote_plus
+
+from pydantic import Field
+from pydantic_settings import BaseSettings
+
+
+class Settings(BaseSettings):
+    APP_TITLE: str = Field("Directory", description="Название приложения")
+    APP_DESCRIPTION: str = Field("Справочник организаций, зданий и их деятельности", description="Описание приложения")
+    API_KEY: str = Field(..., description="API ключ")
+
+    DB_TYPE: str = Field("postgresql", description="Тип БД")
+    DB_CONNECTOR: str = Field("asyncpg", description="Коннектор к БД")
+    POSTGRES_DB: str = Field(..., description="Название БД")
+    POSTGRES_USER: str = Field(..., description="Имя пользователя БД")
+    POSTGRES_PASSWORD: str = Field(..., description="Пароль БД")
+    POSTGRES_CONTAINER: str = Field("localhost", description="Имя контейнера с БД")
+    POSTGRES_PORT: int = Field(5432, description="Порт БД")
+
+    DB_SCHEMA_DIRECTORY: str = Field("directory", description="Имя схемы БД")
+
+    class Config:
+        env_file = ".env"
+        extra = "ignore"
+
+    def get_db_url(self):
+        encoded_password = quote_plus(self.POSTGRES_PASSWORD)
+        return (
+            f"{self.DB_TYPE}+{self.DB_CONNECTOR}://"
+            f"{self.POSTGRES_USER}:{encoded_password}@"
+            f"{self.POSTGRES_CONTAINER}:{self.POSTGRES_PORT}/"
+            f"{self.POSTGRES_DB}"
+        )
+
+
+settings = Settings()
