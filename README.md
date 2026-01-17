@@ -1,0 +1,1 @@
+# directory_testtask_secunda
