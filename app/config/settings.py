@@ -1,7 +1,7 @@
 from urllib.parse import quote_plus
 
 from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -19,9 +19,11 @@ class Settings(BaseSettings):
 
     DB_SCHEMA_DIRECTORY: str = Field("directory", description="Имя схемы БД")
 
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
     def get_db_url(self):
         encoded_password = quote_plus(self.POSTGRES_PASSWORD)
