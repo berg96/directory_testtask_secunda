@@ -10,6 +10,11 @@ class BuildingRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
+    async def exists(self, building_id: int) -> bool:
+        query = select(Building.id).where(Building.id == building_id)
+        result = await self.session.execute(query)
+        return result.scalar_one_or_none() is not None
+
     async def get_buildings_in_radius(
         self, latitude: float, longitude: float, radius_km: float
     ) -> list[BuildingEntity]:

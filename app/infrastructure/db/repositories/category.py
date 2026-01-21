@@ -12,6 +12,11 @@ class CategoryRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
+    async def exists(self, category_id: int) -> bool:
+        query = select(Category.id).where(Category.id == category_id)
+        result = await self.session.execute(query)
+        return result.scalar_one_or_none() is not None
+
     async def get_category_with_nested_categories(
         self,
         category_id: int,
