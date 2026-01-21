@@ -10,7 +10,7 @@ class BuildingRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_buildings_within_radius(
+    async def get_buildings_in_radius(
         self, latitude: float, longitude: float, radius_km: float
     ) -> list[BuildingEntity]:
         point = func.ST_SetSRID(func.ST_MakePoint(longitude, latitude), 4326)

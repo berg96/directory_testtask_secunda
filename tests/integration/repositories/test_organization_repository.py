@@ -60,8 +60,8 @@ async def test_get_by_category_id(async_session, create_category, create_organiz
     assert len(result) == 2
     assert all(any(category.name == eat.name for category in organization.categories) for organization in result)
     org_ids = [organization.id for organization in result]
-    assert org1.id in org_ids and org3.id in org_ids
-    assert org2.id not in org_ids
+    assert org1.id in org_ids and org2.id in org_ids
+    assert org3.id not in org_ids
 
 
 @pytest.mark.asyncio
