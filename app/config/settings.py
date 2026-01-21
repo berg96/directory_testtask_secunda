@@ -19,6 +19,8 @@ class Settings(BaseSettings):
 
     DB_SCHEMA_DIRECTORY: str = Field("directory", description="Имя схемы БД")
 
+    CATEGORY_MAX_DEPTH: int = Field(3, description="Максимальный уровень вложенности деятельностей")
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

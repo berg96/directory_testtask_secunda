@@ -1,12 +1,15 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import Column, ForeignKey, String, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.infrastructure.db.base import Base
-from app.infrastructure.db.models.building import Building
-from app.infrastructure.db.models.category import Category
-from app.infrastructure.db.models.phone import Phone
+
+from .building import Building
+from .phone import Phone
+
+if TYPE_CHECKING:
+    from .category import Category
 
 organization_category = Table(
     "organization_category",
@@ -20,8 +23,8 @@ class Organization(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False, unique=True, comment="Название организации")
     building_id: Mapped[Optional[int]] = mapped_column(ForeignKey("buildings.id", ondelete="SET NULL"))
 
-    building: Mapped[Building] = relationship("Building", back_populates="organizations")
-    categories: Mapped[list[Category]] = relationship(
+    building: Mapped[Building] = relationship(Building, back_populates="organizations")
+    categories: Mapped[list["Category"]] = relationship(
         "Category", secondary=organization_category, back_populates="organizations"
     )
-    phones: Mapped[list[Phone]] = relationship("Phone", back_populates="organization", cascade="all, delete-orphan")
+    phones: Mapped[list[Phone]] = relationship(Phone, back_populates="organization", cascade="all, delete-orphan")
