@@ -10,7 +10,6 @@ def setup_exception_handlers(app):
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
             content={
-                "error": "RESOURCE_NOT_FOUND",
-                "message": exc.message,
+                "detail": exc.message,
             },
         )

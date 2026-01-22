@@ -27,7 +27,7 @@ async def get_organization(
 ) -> OrganizationResponse:
     organization = await OrganizationService(session).get_by_id(organization_id)
     if organization is None:
-        raise HTTPException(status_code=404, detail="Organization not found")
+        raise HTTPException(status_code=404, detail=f"Organization not found id={organization_id}")
     return OrganizationResponse.from_entity(organization)
 
 
@@ -75,7 +75,7 @@ async def get_by_category(
     "/nested-categories/{category_id}",
     response_model=OrganizationListResponse,
     status_code=status.HTTP_200_OK,
-    name="Получить список организаций с деятельностью",
+    name="Получить список организаций с деятельностью и её наследниками",
     description="Получить список организаций, относящиеся к указанному виду деятельности и всех наследников",
     responses={
         401: {"model": ErrorResponse, "description": "Пользователь не авторизован"},
